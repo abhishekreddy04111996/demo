@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Tasks Notes</title>
+    <title>Daily Tasks Notes - Advanced</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,66 +13,201 @@
             <p class="date" id="currentDate"></p>
         </header>
 
-        <div class="input-section">
-            <div class="input-group">
-                <input 
-                    type="text" 
-                    id="taskInput" 
-                    placeholder="Add a new task..." 
-                    class="task-input"
-                >
-                <select id="categorySelect" class="category-select">
-                    <option value="Personal">Personal</option>
-                    <option value="Work">Work</option>
-                    <option value="Health">Health</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Other">Other</option>
-                </select>
-                <select id="prioritySelect" class="priority-select">
-                    <option value="Low">Low</option>
-                    <option value="Medium" selected>Medium</option>
-                    <option value="High">High</option>
-                </select>
-            </div>
-            <input 
-                type="date" 
-                id="dueDateInput" 
-                class="due-date-input"
-            >
-            <button id="addBtn" class="add-btn">➕ Add Task</button>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="daily">📅 Daily</button>
+            <button class="nav-tab" data-tab="weekly">📊 Weekly</button>
+            <button class="nav-tab" data-tab="monthly">📈 Monthly</button>
+            <button class="nav-tab" data-tab="stats">🎯 Stats</button>
         </div>
 
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="active">Active</button>
-            <button class="filter-btn" data-filter="completed">Completed</button>
-            <button class="filter-btn" data-filter="Personal">Personal</button>
-            <button class="filter-btn" data-filter="Work">Work</button>
-            <button class="filter-btn" data-filter="Health">Health</button>
+        <!-- DAILY TAB -->
+        <div id="daily-tab" class="tab-content active">
+            <div class="input-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="Add a new task..." 
+                        class="task-input"
+                    >
+                    <select id="categorySelect" class="category-select">
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="Health">Health</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="prioritySelect" class="priority-select">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <textarea 
+                    id="taskDescription" 
+                    placeholder="Add detailed notes/description..." 
+                    class="task-description"
+                    rows="3"
+                ></textarea>
+                <div class="date-group">
+                    <input 
+                        type="date" 
+                        id="dueDateInput" 
+                        class="due-date-input"
+                    >
+                    <button id="addBtn" class="add-btn">➕ Add Task</button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="Personal">Personal</button>
+                <button class="filter-btn" data-filter="Work">Work</button>
+                <button class="filter-btn" data-filter="Health">Health</button>
+            </div>
+
+            <div class="tasks-section">
+                <ul id="taskList" class="task-list"></ul>
+                <div id="emptyState" class="empty-state">
+                    <p>✨ No tasks yet. Add one to get started!</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-label">Today's Tasks</span>
+                    <span id="totalCount" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Completed</span>
+                    <span id="completedCount" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Pending</span>
+                    <span id="pendingCount" class="stat-value">0</span>
+                </div>
+            </div>
         </div>
 
-        <div class="tasks-section">
-            <ul id="taskList" class="task-list"></ul>
-            <div id="emptyState" class="empty-state">
-                <p>✨ No tasks yet. Add one to get started!</p>
+        <!-- WEEKLY TAB -->
+        <div id="weekly-tab" class="tab-content">
+            <div class="weekly-view">
+                <div class="week-header">
+                    <button id="prevWeekBtn" class="week-nav-btn">← Previous</button>
+                    <h3 id="weekRange"></h3>
+                    <button id="nextWeekBtn" class="week-nav-btn">Next →</button>
+                </div>
+                <div class="weekly-stats">
+                    <div class="week-stat">
+                        <span class="stat-label">Tasks This Week</span>
+                        <span id="weekTaskCount" class="stat-value">0</span>
+                    </div>
+                    <div class="week-stat">
+                        <span class="stat-label">Completed</span>
+                        <span id="weekCompletedCount" class="stat-value">0</span>
+                    </div>
+                    <div class="week-stat">
+                        <span class="stat-label">Completion %</span>
+                        <span id="weekCompletionPercent" class="stat-value">0%</span>
+                    </div>
+                </div>
+                <div id="weeklyTasksList" class="weekly-tasks-list"></div>
             </div>
         </div>
 
-        <div class="stats">
-            <div class="stat">
-                <span class="stat-label">Total</span>
-                <span id="totalCount" class="stat-value">0</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">Completed</span>
-                <span id="completedCount" class="stat-value">0</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">Pending</span>
-                <span id="pendingCount" class="stat-value">0</span>
+        <!-- MONTHLY TAB -->
+        <div id="monthly-tab" class="tab-content">
+            <div class="monthly-view">
+                <div class="month-header">
+                    <button id="prevMonthBtn" class="month-nav-btn">← Previous</button>
+                    <h3 id="monthRange"></h3>
+                    <button id="nextMonthBtn" class="month-nav-btn">Next →</button>
+                </div>
+                <div class="monthly-stats">
+                    <div class="month-stat">
+                        <span class="stat-label">Tasks This Month</span>
+                        <span id="monthTaskCount" class="stat-value">0</span>
+                    </div>
+                    <div class="month-stat">
+                        <span class="stat-label">Completed</span>
+                        <span id="monthCompletedCount" class="stat-value">0</span>
+                    </div>
+                    <div class="month-stat">
+                        <span class="stat-label">Completion %</span>
+                        <span id="monthCompletionPercent" class="stat-value">0%</span>
+                    </div>
+                    <div class="month-stat">
+                        <span class="stat-label">Perfection Score</span>
+                        <span id="perfectScore" class="stat-value">0/10</span>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                <div id="monthlyTasksList" class="monthly-tasks-list"></div>
             </div>
         </div>
 
+        <!-- STATS TAB -->
+        <div id="stats-tab" class="tab-content">
+            <div class="stats-view">
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <h4>📊 All Time Stats</h4>
+                        <div class="stat-row">
+                            <span>Total Tasks Created:</span>
+                            <span id="allTotalTasks">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Total Completed:</span>
+                            <span id="allCompletedTasks">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Overall Completion Rate:</span>
+                            <span id="overallCompletion">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <h4>🎯 Performance</h4>
+                        <div class="stat-row">
+                            <span>On-Time Completion:</span>
+                            <span id="onTimePercent">0%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Overdue Tasks:</span>
+                            <span id="overdueTasks">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Average Tasks/Day:</span>
+                            <span id="avgTasksPerDay">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <h4>🏆 Categories</h4>
+                        <div id="categoryStats"></div>
+                    </div>
+
+                    <div class="stats-card">
+                        <h4>⚡ Priorities</h4>
+                        <div id="priorityStats"></div>
+                    </div>
+                </div>
+
+                <div class="perfection-meter">
+                    <h3>🌟 Overall Perfection Score</h3>
+                    <div class="perfection-bar">
+                        <div id="perfectionFill" class="perfection-fill"></div>
+                    </div>
+                    <p id="perfectionText">0/100</p>
+                    <p id="perfectionMessage" class="perfection-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
         <div class="actions">
             <button id="clearCompletedBtn" class="action-btn clear-btn">🗑️ Clear Completed</button>
             <button id="exportBtn" class="action-btn export-btn">📥 Export as JSON</button>
